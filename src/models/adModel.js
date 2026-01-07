@@ -69,6 +69,36 @@ const adSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Índices para optimización de queries
+// 1. Búsqueda por oferta y estado (query más común)
+adSchema.index({ offer: 1, status: 1 });
+
+// 2. Búsqueda geoespacial (búsqueda por ubicación/radio)
+adSchema.index({ 'property.location.coordinates': '2dsphere' });
+
+// 3. Búsqueda por ciudad (filtros de ubicación)
+adSchema.index({ 'property.location.city': 1 });
+
+// 4. Ordenamiento por precio
+adSchema.index({ price: 1 });
+
+// 5. Reference ID único para búsqueda rápida
+adSchema.index({ 'property.referenceId': 1 }, { unique: true });
+
+// 6. Ordenamiento por fecha de creación (newest first)
+adSchema.index({ createdAt: -1 });
+
+// 7. Búsqueda por tipo de propiedad
+adSchema.index({ 'property.characteristics.type': 1 });
+
+// 8. Índice compuesto para búsquedas complejas
+// (ciudad + oferta + precio para filtros combinados)
+adSchema.index({
+  'property.location.city': 1,
+  offer: 1,
+  price: 1
+});
+
 const Ad = mongoose.model("Ad", adSchema);
 
 module.exports = Ad;

@@ -1,0 +1,54 @@
+version: 2
+updates:
+  # Mantener dependencias de npm actualizadas
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Madrid"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "your-github-username"  # Cambiar por tu usuario de GitHub
+    assignees:
+      - "your-github-username"  # Cambiar por tu usuario de GitHub
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    # Agrupar actualizaciones de dependencias de desarrollo
+    groups:
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+    # Ignorar actualizaciones específicas si es necesario
+    ignore:
+      # Ejemplo: ignorar actualizaciones major de mongoose
+      # - dependency-name: "mongoose"
+      #   update-types: ["version-update:semver-major"]
+
+  # Mantener GitHub Actions actualizadas
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Madrid"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
